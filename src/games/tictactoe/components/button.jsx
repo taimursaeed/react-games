@@ -6,25 +6,19 @@ const styles = {
   },
 };
 export default function Button({ id, isClicked, value, player, onClick }) {
-  let buttonObj = { id, isClicked, value, player };
-  const [state, setState] = useState(buttonObj);
-
   const handleClick = () => {
-    const callbackResponse = onClick(state.id);
-    setState((prevState) => {
-      return { ...prevState, isClicked: true, ...callbackResponse };
-    });
+    onClick(id);
   };
 
   return (
-    <button onClick={handleClick} disabled={state.isClicked}>
-      {state.id.toString()}
+    <button onClick={handleClick} disabled={isClicked}>
+      {id?.toString()}
       <br />
-      {state.isClicked.toString()}
+      {isClicked?.toString()}
       <br />
-      {state.player?.toString()}
+      {player?.toString()}
       <br />
-      <span style={styles.button}>{state.value}</span>
+      <span style={styles.button}>{value}</span>
     </button>
   );
 }

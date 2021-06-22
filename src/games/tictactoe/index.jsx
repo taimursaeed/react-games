@@ -4,6 +4,22 @@ import { TURNTYPE } from "./constants";
 
 export default function tictactoe() {
   const GRIDSIZE = 9;
+
+  const gridObj = () => {
+    let temp = [];
+    for (let i = 0; i < GRIDSIZE; i++) {
+      temp.push({
+        id: i,
+        isClicked: false,
+        value: null,
+        player: null,
+        onClick: null,
+      });
+    }
+    return temp;
+  };
+
+  const [gridCells, setGridCells] = useState(gridObj);
   const [turn, setTurn] = useState(TURNTYPE["PLAYER"]);
   const [winner, setWinner] = useState(null);
   const [playerBoxes, setPlayerBoxes] = useState([]);
@@ -27,9 +43,16 @@ export default function tictactoe() {
       ? setPlayerBoxes([...playerBoxes, boxId])
       : setComputerBoxes([...computerBoxes, boxId]);
 
-    setTurn(nextTurn);
+    let cells = [...gridCells];
+    const indexOfCell = cells.findIndex((i) => i.id === boxId);
+    cells[indexOfCell] = {
+      ...cells[indexOfCell],
+      isClicked: true,
+      value: TURNTYPE[turn.type].symbol,
+    };
 
-    return { value: turn.symbol, player: turn.type };
+    setGridCells(cells);
+    setTurn(nextTurn);
   };
 
   useEffect(() => {
@@ -67,26 +90,23 @@ export default function tictactoe() {
     }
   };
 
-  let grid = [];
-  const generateGrid = (GRIDSIZE) => {
-    for (let i = 0; i < GRIDSIZE; i++) {
-      grid.push(
-        <Button
-          key={i}
-          id={i}
-          isClicked={false}
-          value=""
-          onClick={buttonCallback}
-        />
-      );
-    }
-    return grid;
+  const generateGrid = () => {
+    return gridCells.map((i) => (
+      <Button
+        key={i.id}
+        id={i.id}
+        isClicked={i.isClicked}
+        value={i.value}
+        onClick={buttonCallback}
+      />
+    ));
   };
+
   return (
     <div>
-      <h1>Tic Tac Toe</h1>
       <div style={styles.wrap}>
-        <div style={styles.grid}>{generateGrid(GRIDSIZE)} </div>
+        <h1>Tic Tac Toe</h1>
+        <div style={styles.grid}>{generateGrid()} </div>
         <h2> {winner && `Winner: ${winner}`}</h2>
       </div>
     </div>
