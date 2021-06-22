@@ -5,14 +5,14 @@ const styles = {
     fontSize: "30px",
   },
 };
-export default function Button({ id, isClicked, value, onClick }) {
-  let buttonObj = { id, isClicked, value };
+export default function Button({ id, isClicked, value, player, onClick }) {
+  let buttonObj = { id, isClicked, value, player };
   const [state, setState] = useState(buttonObj);
 
   const handleClick = () => {
-    const currentTurn = onClick();
+    const callbackResponse = onClick(state.id);
     setState((prevState) => {
-      return { ...prevState, isClicked: true, value: currentTurn };
+      return { ...prevState, isClicked: true, ...callbackResponse };
     });
   };
 
@@ -21,6 +21,8 @@ export default function Button({ id, isClicked, value, onClick }) {
       {state.id.toString()}
       <br />
       {state.isClicked.toString()}
+      <br />
+      {state.player?.toString()}
       <br />
       <span style={styles.button}>{state.value}</span>
     </button>
