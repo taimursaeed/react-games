@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Button from "./components/button";
 import { TURNTYPE } from "./constants";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  max-width: 500px;
+  margin: auto;
+`;
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 200px;
+`;
 
 export default function tictactoe() {
   const GRIDSIZE = 9;
@@ -103,24 +115,10 @@ export default function tictactoe() {
   };
 
   return (
-    <div>
-      <div style={styles.wrap}>
-        <h1>Tic Tac Toe</h1>
-        <div style={styles.grid}>{generateGrid()} </div>
-        <h2> {winner}</h2>
-      </div>
-    </div>
+    <Wrapper>
+      <h1>Tic Tac Toe</h1>
+      <Grid>{generateGrid()} </Grid>
+      <h2>{winner}</h2>
+    </Wrapper>
   );
 }
-
-const styles = {
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gridTemplateRows: "repeat(3, 1fr)",
-  },
-  wrap: {
-    maxWidth: "500px",
-    margin: "auto",
-  },
-};

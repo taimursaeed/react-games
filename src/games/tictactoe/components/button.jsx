@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
+import styled from "styled-components";
 
-const styles = {
-  button: {
-    fontSize: "30px",
-  },
-};
-export default function Button({ id, isClicked, value, player, onClick }) {
+const GridButton = styled.button`
+  font-size: 30px;
+  line-height: 30px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  svg {
+    vertical-align: middle;
+  }
+  &:hover {
+    background: #fafafa;
+  }
+  &:disabled {
+    &:hover {
+      background: white;
+      cursor: initial;
+    }
+  }
+`;
+export default function Button({ id, isClicked, value, onClick }) {
   const handleClick = () => {
     onClick(id);
   };
 
   return (
-    <button onClick={handleClick} disabled={isClicked}>
-      {id?.toString()}
-      <br />
-      {isClicked?.toString()}
-      <br />
-      {player?.toString()}
-      <br />
-      <span style={styles.button}>{value}</span>
-    </button>
+    <GridButton onClick={handleClick} disabled={isClicked}>
+      {value}
+    </GridButton>
   );
 }
