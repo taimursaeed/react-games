@@ -75,6 +75,16 @@ export default function tictactoe() {
     turn === TURNTYPE["PLAYER2"] && turnPlayer2();
   }, [turn]);
 
+  useEffect(() => {
+    if (winner) {
+      const gridCellsCopy = [...gridCells];
+      for (const i in gridCellsCopy) {
+        gridCellsCopy[i].isClicked = true;
+      }
+      setGridCells(gridCellsCopy);
+    }
+  }, [winner]);
+
   const turnPlayer2 = () => {
     console.log("PLAYER2 turn");
     let availableIDs = [];
