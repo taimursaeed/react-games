@@ -6,12 +6,13 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   max-width: 500px;
   margin: auto;
+  text-align: center;
 `;
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  height: 200px;
+  height: 300px;
 `;
 
 export default function tictactoe() {
@@ -61,6 +62,7 @@ export default function tictactoe() {
       ...cells[indexOfCell],
       isClicked: true,
       value: turn.symbol,
+      player: TURNTYPE["PLAYER1"],
     };
 
     setGridCells(cells);
@@ -105,6 +107,7 @@ export default function tictactoe() {
         ...gridCellsCopy[randomID.id],
         isClicked: true,
         value: turn.symbol,
+        player: TURNTYPE["PLAYER2"],
       };
 
       setPlayer2Boxes([...player2Boxes, randomID.id]);
@@ -146,6 +149,7 @@ export default function tictactoe() {
         isClicked={i.isClicked}
         value={i.value}
         onClick={buttonCallback}
+        player={i.player}
       />
     ));
   };
