@@ -1,8 +1,8 @@
 import React from "react";
 const TURNTYPE = {
-  PLAYER: {
+  PLAYER1: {
     id: 1,
-    type: "PLAYER",
+    name: "PLAYER",
     symbol: (
       <svg
         width="1em"
@@ -19,9 +19,9 @@ const TURNTYPE = {
       </svg>
     ),
   },
-  COMPUTER: {
+  PLAYER2: {
     id: 2,
-    type: "COMPUTER",
+    name: "COMPUTER",
     symbol: (
       <svg
         width="1em"

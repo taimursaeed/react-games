@@ -20,10 +20,10 @@ export default function tictactoe() {
   };
 
   const [gridCells, setGridCells] = useState(gridObj);
-  const [turn, setTurn] = useState(TURNTYPE["PLAYER"]);
+  const [turn, setTurn] = useState(TURNTYPE["PLAYER1"]);
   const [winner, setWinner] = useState(null);
-  const [playerBoxes, setPlayerBoxes] = useState([]);
-  const [computerBoxes, setComputerBoxes] = useState([]);
+  const [player1Boxes, setPlayer1Boxes] = useState([]);
+  const [player2Boxes, setPlayer2Boxes] = useState([]);
 
   const winnerMatrix = [
     [0, 1, 2],
@@ -38,17 +38,17 @@ export default function tictactoe() {
 
   const buttonCallback = (boxId) => {
     const nextTurn =
-      turn === TURNTYPE["PLAYER"] ? TURNTYPE["COMPUTER"] : TURNTYPE["PLAYER"];
-    turn.type === "PLAYER"
-      ? setPlayerBoxes([...playerBoxes, boxId])
-      : setComputerBoxes([...computerBoxes, boxId]);
+      turn === TURNTYPE["PLAYER1"] ? TURNTYPE["PLAYER2"] : TURNTYPE["PLAYER1"];
+    turn === TURNTYPE["PLAYER1"]
+      ? setPlayer1Boxes([...player1Boxes, boxId])
+      : setPlayer2Boxes([...player2Boxes, boxId]);
 
     let cells = [...gridCells];
     const indexOfCell = cells.findIndex((i) => i.id === boxId);
     cells[indexOfCell] = {
       ...cells[indexOfCell],
       isClicked: true,
-      value: TURNTYPE[turn.type].symbol,
+      value: turn.symbol,
     };
 
     setGridCells(cells);
@@ -56,26 +56,26 @@ export default function tictactoe() {
   };
 
   useEffect(() => {
-    turn.type === "COMPUTER" && turnComputer();
-    if (playerBoxes.length >= 3 || computerBoxes.length >= 3) {
+    turn === TURNTYPE["PLAYER2"] && turnPlayer2();
+    if (player1Boxes.length >= 3 || player2Boxes.length >= 3) {
       checkForWinner();
     }
   }, [turn]);
 
-  const turnComputer = () => {
-    console.log("computer turn");
+  const turnPlayer2 = () => {
+    console.log("PLAYER2 turn");
   };
   const checkForWinner = () => {
     for (const i of winnerMatrix) {
       if (!winner) {
-        findWin(i, playerBoxes, "PLAYER");
-        findWin(i, computerBoxes, "COMPUTER");
+        findWin(i, player1Boxes, TURNTYPE["PLAYER1"].name);
+        findWin(i, player2Boxes, TURNTYPE["PLAYER2"].name);
       } else {
         break;
       }
     }
     !winner &&
-      playerBoxes.length + computerBoxes.length === GRIDSIZE &&
+      player1Boxes.length + player2Boxes.length === GRIDSIZE &&
       setWinner("Draw");
   };
 
@@ -85,7 +85,7 @@ export default function tictactoe() {
       0
     );
     if (result >= 3) {
-      setWinner(user);
+      setWinner(`${user} won`);
       return;
     }
   };
@@ -107,7 +107,7 @@ export default function tictactoe() {
       <div style={styles.wrap}>
         <h1>Tic Tac Toe</h1>
         <div style={styles.grid}>{generateGrid()} </div>
-        <h2> {winner && `Winner: ${winner}`}</h2>
+        <h2> {winner}</h2>
       </div>
     </div>
   );
