@@ -17,7 +17,7 @@ const Grid = styled.div`
 export default function tictactoe() {
   const GRIDSIZE = 9;
 
-  const gridObj = () => {
+  const cellData = () => {
     let temp = [];
     for (let i = 0; i < GRIDSIZE; i++) {
       temp.push({
@@ -31,7 +31,7 @@ export default function tictactoe() {
     return temp;
   };
 
-  const [gridCells, setGridCells] = useState(gridObj);
+  const [gridCells, setGridCells] = useState(cellData);
   const [turn, setTurn] = useState(TURNTYPE["PLAYER1"]);
   const [winner, setWinner] = useState(null);
   const [player1Boxes, setPlayer1Boxes] = useState([]);
@@ -68,15 +68,41 @@ export default function tictactoe() {
   };
 
   useEffect(() => {
+    (player1Boxes.length >= 3 || player2Boxes.length >= 3) && checkForWinner();
+  }, [player1Boxes, player2Boxes]);
+
+  useEffect(() => {
     turn === TURNTYPE["PLAYER2"] && turnPlayer2();
-    if (player1Boxes.length >= 3 || player2Boxes.length >= 3) {
-      checkForWinner();
-    }
   }, [turn]);
 
   const turnPlayer2 = () => {
     console.log("PLAYER2 turn");
+    let availableIDs = [];
+    const gridCellsCopy = [...gridCells];
+    const emptyCells = gridCellsCopy.filter((i) => {
+      if (i.isClicked === false) {
+        availableIDs.push(i.id);
+        return true;
+      }
+    });
+    if (emptyCells.length > 0 && !winner) {
+      const randomNumber = Math.floor(Math.random() * availableIDs.length - 1);
+      const selectedID = availableIDs[randomNumber > -1 ? randomNumber : 0];
+
+      const randomID = gridCellsCopy.find((i) => i.id === selectedID);
+
+      gridCellsCopy[randomID.id] = {
+        ...gridCellsCopy[randomID.id],
+        isClicked: true,
+        value: turn.symbol,
+      };
+
+      setPlayer2Boxes([...player2Boxes, randomID.id]);
+      setGridCells(gridCellsCopy);
+      setTurn(TURNTYPE["PLAYER1"]);
+    }
   };
+
   const checkForWinner = () => {
     for (const i of winnerMatrix) {
       if (!winner) {
