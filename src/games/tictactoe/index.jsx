@@ -14,7 +14,31 @@ const Grid = styled.div`
   grid-template-rows: repeat(3, 1fr);
   height: 300px;
 `;
-
+const Play = styled.button`
+  display: flex;
+  border: none;
+  background: #fafafa;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  &:hover {
+    background: #f2f2f2;
+  }
+  > svg {
+    width: 1rem;
+    margin-right: 1rem;
+  }
+`;
+const PlayWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+`;
 export default function tictactoe() {
   const GRIDSIZE = 9;
 
@@ -127,7 +151,7 @@ export default function tictactoe() {
     }
     !winner &&
       player1Boxes.length + player2Boxes.length === GRIDSIZE &&
-      setWinner("Draw");
+      setWinner("DRAW");
   };
 
   const findWin = (matrixArr, arr, user) => {
@@ -136,7 +160,7 @@ export default function tictactoe() {
       0
     );
     if (result >= 3) {
-      setWinner(`${user} won`);
+      setWinner(`${user} WON`);
       return;
     }
   };
@@ -153,12 +177,40 @@ export default function tictactoe() {
       />
     ));
   };
-
+  const resetGame = () => {
+    setWinner(null);
+    setGridCells(cellData());
+    setTurn(TURNTYPE["PLAYER1"]);
+    setPlayer1Boxes([]);
+    setPlayer2Boxes([]);
+  };
   return (
     <Wrapper>
       <h1>Tic Tac Toe</h1>
       <Grid>{generateGrid()} </Grid>
-      <h2>{winner}</h2>
+      <PlayWrap>
+        <h2>{winner}</h2>
+        {winner && <PlayAgain onClick={resetGame} />}
+      </PlayWrap>
     </Wrapper>
   );
 }
+
+const PlayAgain = (props) => {
+  return (
+    <Play onClick={props.onClick}>
+      <svg
+        fill="currentColor"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fillRule="evenodd"
+          d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+          clipRule="evenodd"
+        ></path>
+      </svg>
+      Play Again
+    </Play>
+  );
+};
