@@ -12,12 +12,14 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: 350px;
   border: 0.5rem solid #f0f0f0;
   border-radius: 1rem;
   overflow: hidden;
   margin: auto;
+  box-sizing: border-box;
 `;
 const Play = styled.button`
   display: flex;
@@ -41,7 +43,9 @@ const PlayWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   margin: 1rem auto;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
 `;
 export default function tictactoe() {
   const GRIDSIZE = 9;
