@@ -16,6 +16,7 @@ const Grid = styled.div`
 `;
 const Play = styled.button`
   display: flex;
+  align-items: center;
   border: none;
   background: #fafafa;
   padding: 1rem;
