@@ -12,23 +12,25 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
-  height: 300px;
+  width: 400px;
+  height: 350px;
+  border: 0.5rem solid #f0f0f0;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin: auto;
 `;
 const Play = styled.button`
   display: flex;
   align-items: center;
   border: none;
-  background: #fafafa;
+  background: #de003d;
+  color: white;
   padding: 1rem;
   font-size: 1rem;
   font-weight: bold;
   white-space: nowrap;
   cursor: pointer;
   border-radius: 0.25rem;
-  border: 1px solid #ccc;
-  &:hover {
-    background: #f2f2f2;
-  }
   > svg {
     width: 1rem;
     margin-right: 1rem;
@@ -38,7 +40,8 @@ const PlayWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1rem;
+  margin: 1rem auto;
+  width: 400px;
 `;
 export default function tictactoe() {
   const GRIDSIZE = 9;

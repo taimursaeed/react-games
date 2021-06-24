@@ -13,8 +13,28 @@ const GridButton = styled.button`
       return "#007eff";
     } else return "white";
   }};
+  color: ${(props) => {
+    if (props.player === TURNTYPE["PLAYER1"]) {
+      return "#087108";
+    } else if (props.player === TURNTYPE["PLAYER2"]) {
+      return "#234e79";
+    } else return "white";
+  }};
   cursor: pointer;
-  border: 1px solid #ccc;
+
+  border-bottom: 0.25rem solid #f0f0f0;
+  border-right: 0.25rem solid #f0f0f0;
+  &:nth-child(3),
+  &:nth-child(6),
+  &:nth-child(9) {
+    border-right: none;
+  }
+  &:nth-child(7),
+  &:nth-child(8),
+  &:nth-child(9) {
+    border-bottom: none;
+  }
+
   svg {
     vertical-align: middle;
   }
