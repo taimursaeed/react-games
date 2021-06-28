@@ -66,9 +66,11 @@ export default function tictactoe() {
 
   const [gridCells, setGridCells] = useState(cellData);
   const [turn, setTurn] = useState(TURNTYPE["PLAYER1"]);
-  const [winner, setWinner] = useState(null);
+  const [winnerText, setWinnerText] = useState(null);
   const [player1Boxes, setPlayer1Boxes] = useState([]);
   const [player2Boxes, setPlayer2Boxes] = useState([]);
+
+  let winner = null;
 
   const winnerMatrix = [
     [0, 1, 2],
@@ -102,25 +104,27 @@ export default function tictactoe() {
   };
 
   useEffect(() => {
-    (player1Boxes.length >= 3 || player2Boxes.length >= 3) && checkForWinner();
-  }, [player1Boxes, player2Boxes]);
-
-  useEffect(() => {
-    turn === TURNTYPE["PLAYER2"] && turnPlayer2();
-  }, [turn]);
-
-  useEffect(() => {
+    if (player1Boxes.length >= 3 || player2Boxes.length >= 3) {
+      winner = checkForWinner();
+    }
     if (winner) {
       const gridCellsCopy = [...gridCells];
       for (const i in gridCellsCopy) {
         gridCellsCopy[i].isClicked = true;
       }
       setGridCells(gridCellsCopy);
+      setWinnerText(winner);
+    } else {
+      if (player1Boxes.length + player2Boxes.length === GRIDSIZE) {
+        setWinnerText("DRAW");
+        return;
+      } else {
+        turn === TURNTYPE["PLAYER2"] && turnPlayer2();
+      }
     }
-  }, [winner]);
+  }, [turn]);
 
   const turnPlayer2 = () => {
-    console.log("PLAYER2 turn");
     let availableIDs = [];
     const gridCellsCopy = [...gridCells];
     const emptyCells = gridCellsCopy.filter((i) => {
@@ -149,27 +153,27 @@ export default function tictactoe() {
   };
 
   const checkForWinner = () => {
+    let player1Won = null;
+    let player2Won = null;
     for (const i of winnerMatrix) {
-      if (!winner) {
-        findWin(i, player1Boxes, TURNTYPE["PLAYER1"].name);
-        findWin(i, player2Boxes, TURNTYPE["PLAYER2"].name);
-      } else {
+      player1Won = findWin(i, player1Boxes, TURNTYPE["PLAYER1"].name);
+      player2Won = findWin(i, player2Boxes, TURNTYPE["PLAYER2"].name);
+      if (player1Won || player2Won) {
         break;
       }
     }
-    !winner &&
-      player1Boxes.length + player2Boxes.length === GRIDSIZE &&
-      setWinner("DRAW");
+    return player1Won || player2Won;
   };
 
   const findWin = (matrixArr, arr, user) => {
-    let result = matrixArr.reduce(
+    let totalMatches = matrixArr.reduce(
       (acc, current) => (arr.indexOf(current) > -1 ? acc + 1 : acc),
       0
     );
-    if (result >= 3) {
-      setWinner(`${user} WON`);
-      return;
+    if (totalMatches >= 3) {
+      return `${user} WON`;
+    } else {
+      return null;
     }
   };
 
@@ -185,20 +189,23 @@ export default function tictactoe() {
       />
     ));
   };
+
   const resetGame = () => {
-    setWinner(null);
+    winner = null;
+    setWinnerText(null);
     setGridCells(cellData());
     setTurn(TURNTYPE["PLAYER1"]);
     setPlayer1Boxes([]);
     setPlayer2Boxes([]);
   };
+
   return (
     <Wrapper>
       <h1>Tic Tac Toe</h1>
       <Grid>{generateGrid()} </Grid>
       <PlayWrap>
-        <h2>{winner}</h2>
-        {winner && <PlayAgain onClick={resetGame} />}
+        <h2>{winnerText}</h2>
+        {winnerText && <PlayAgain onClick={resetGame} />}
       </PlayWrap>
     </Wrapper>
   );
